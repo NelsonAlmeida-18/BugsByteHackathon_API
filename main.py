@@ -22,13 +22,16 @@ def createAccount():
     return ""
 
 @app.route("/login", methods=["POST"])
-async def login():
+def login():
     request = request.json
     statusCode, result = my_backend.login({"id":request["id"], "pwd": request["pwd"]})
     if statusCode!=200:
         return ""    
     return result
 
+@app.route("/getAllUsers", methods=["GET"])
+def getAllUsers():
+    return my_backend.getAllUsers()
 
 
 if __name__ == '__main__':
