@@ -1,6 +1,8 @@
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import sys
+import subprocess
 from classes import *
 from backend import *
 import datetime
@@ -8,6 +10,9 @@ import json
 
 app = FastAPI()
 my_backend = backend()
+
+subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
+'fastapi[all]']
 
 origins = ["*"]
 
