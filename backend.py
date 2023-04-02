@@ -122,10 +122,10 @@ class backend:
         return userInterests
     
 
-    def getSugestions(self):
+    def getSugestions(self, token):
         json = {}
         json["users"] = []
-        suges = self.checkSimilarPreferencesInterests()
+        suges = self.checkSimilarPreferences(token)
         print(suges)
         for i in suges:
             dic = {}
