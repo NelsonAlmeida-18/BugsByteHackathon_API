@@ -59,8 +59,7 @@ def getSugestion():
     conta = request.json
     result = my_backend.getSugestions(conta["token"])
     if result != []:
-        print(result)
-        return result[0]
+        return result
     else:
         return result
 

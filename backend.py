@@ -126,12 +126,12 @@ class backend:
         json = {}
         json["users"] = []
         suges = self.checkSimilarPreferences(token)
-        for i in suges:
+        if suges!=[]:
             dic = {}
-            dic["userId"] = i[0]
-            dic["name"] = i[1] 
-            dic["pfp"] = i[2]
-            dic["interests"] = self.getInterestsByUserId(i[0])
+            dic["userId"] = suges[0][0]
+            dic["name"] = suges[0][1] 
+            dic["pfp"] = suges[0][2]
+            dic["interests"] = self.getInterestsByUserId(suges[0][0])
             json["users"].append(dic)
 
         return json
