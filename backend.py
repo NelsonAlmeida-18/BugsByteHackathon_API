@@ -113,13 +113,19 @@ class backend:
         valid = self.verifyExp(token)
         if valid:
             userId = self.decodeJWT(token)["userId"]
+            interests = self.getInterestsColumns()
             query = f"SELECT * FROM interests where id = '{userId}'"
             cursor = self.connection.cursor()
             cursor.execute(query)
-            result = cursor.fetchall()
-            print(result)
+            result = cursor.fetchall()[0]
+            userInterests = []
+            for i in range(len(result)):
+                if result[i]==1:
+                    userInterests.append(interests[i])
+            return userInterests
 
-        return ""
+
+        return []
 
     def getInterestsColumns(self):
         cursor = self.connection.cursor()

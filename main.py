@@ -51,7 +51,7 @@ def updateInterests():
 def getUserInterests():
     conta = request.json
     result = my_backend.getUserInterests(conta["token"])
-    return {result}
+    return {"interests":result}
 
 
 if __name__ == '__main__':
