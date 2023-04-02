@@ -11,10 +11,13 @@ def index():
 
 @app.route("/signup", methods=["POST"])
 def createAccount(conta):
+
     if conta!=None:
         statusCode, payload = my_backend.createNewUser({"email":conta["email"], "pwd":conta["pwd"]})
         if statusCode!=200:
             return ""
         return payload
+    
+
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
