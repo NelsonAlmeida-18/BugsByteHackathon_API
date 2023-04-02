@@ -28,7 +28,7 @@ def login():
 @app.route("/updateAccount", methods=["PUT"])
 def updateAccount():
     conta = request.json
-    statusCode = my_backend.updateAccount(conta["token"],{"name":conta["name"], "dob":conta["dob"], "contact":conta["contact"], "academicDegree":conta["academicDegree"], "academicArea":conta["academicArea"]})
+    statusCode = my_backend.updateAccount(conta["token"],{"name":conta["name"], "dob":conta["dob"], "contact":conta["contact"], "academicDegree":conta["academicDegree"], "academicArea":conta["academicArea"], "bio":conta["bio"]})
     return f"{statusCode}"
 
 @app.route("/updatePreferences", methods=["PUT"])
