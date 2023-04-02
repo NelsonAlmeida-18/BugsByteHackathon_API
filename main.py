@@ -67,6 +67,14 @@ def getSuggestions():
 def getAllUsers():
     return my_backend.getAllUsers()
 
+@app.route("/getChats", methods=["GET"])
+def getChats():
+    conta = request.json
+    token = conta["token"]
+    result = my_backend.getChats(token)
+    print(result)
+    return result
+
 @app.route("/swipe", methods=["POST"])
 def swipe():
     conta = request.json
