@@ -42,5 +42,16 @@ def updatePreferences():
     return f"{result}"
 
 
+@app.route("/updateInterest", methods=["PUT"])
+def updateInterests():
+    conta = request.json
+    result = my_backend.updateInterests(conta["token"], conta["interests"])
+    return f"{result}"
+
+@app.route("/getInterests", methods=["GET"])
+def getInterests():
+    return {"interests" : my_backend.getInterests()}
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
