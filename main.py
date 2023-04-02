@@ -58,6 +58,7 @@ def getProfileInfo():
 def getSugestion():
     conta = request.json
     result = my_backend.getSugestions(conta["token"])
+    print(result)
     if result != []:
         return result
     else:
