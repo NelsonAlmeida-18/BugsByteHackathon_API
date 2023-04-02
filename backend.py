@@ -126,7 +126,6 @@ class backend:
         json = {}
         json["users"] = []
         suges = self.checkSimilarPreferences(token)
-        print(suges)
         for i in suges:
             dic = {}
             dic["userId"] = i[0]

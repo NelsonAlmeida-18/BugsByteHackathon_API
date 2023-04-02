@@ -58,8 +58,7 @@ def getProfileInfo():
 def getSuggestions():
     conta = request.json
     result = my_backend.getSugestions(conta["token"])
-    print(result)
-    return {"teste":"test"}
+    return result
 
 @app.route("/getAllUsers", methods=["GET"])
 def getAllUsers():
