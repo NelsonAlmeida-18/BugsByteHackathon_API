@@ -23,8 +23,8 @@ def createAccount():
 
 @app.route("/login", methods=["POST"])
 def login():
-    request = request.json
-    statusCode, result = my_backend.login({"id":request["id"], "pwd": request["pwd"]})
+    conta = request.json
+    statusCode, result = my_backend.login({"id":conta["id"], "pwd": conta["pwd"]})
     if statusCode!=200:
         return ""    
     return result
