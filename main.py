@@ -12,7 +12,7 @@ def index():
     return jsonify({"Choo Choo": "Welcome to your Flask app 🚅"})
 
 @app.route("/signup", methods=["POST"])
-def createAccount(request):
+def createAccount():
     """
     print(conta)
     if conta!=None:
@@ -22,8 +22,10 @@ def createAccount(request):
         return payload
     """
     data = request.data
+    json = request.json
+    print(json)
     print(data)
-    return data
+    return "heu"
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
