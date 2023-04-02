@@ -66,7 +66,7 @@ def getSugestion():
 
 @app.route("/getAllUsers", methods=["GET"])
 def getAllUsers():
-    return my_backend.getAllUsers()
+    return {"users":my_backend.getAllUsers()}
 
 @app.route("/getChats", methods=["GET"])
 def getChats():
