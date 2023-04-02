@@ -258,7 +258,7 @@ class backend:
 
             sqlite3_update = "UPDATE interests SET "
 
-            for i in range(0, len(allInterests)):
+            for i in range(1, len(allInterests)):
                 if allInterests[i] in payload:
                     sqlite3_update += allInterests[i] + " = 1"
                 else:
