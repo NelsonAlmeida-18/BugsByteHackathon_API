@@ -56,23 +56,13 @@ def create_db():
     cursor.execute('''
                 CREATE TABLE IF NOT EXISTS place(
                 [id] INTEGER PRIMARY KEY AUTOINCREMENT,
-                [coordinates] TEXT,
+                [street] TEXT,
                 [city] TEXT,
                 [country] TEXT,
                 [studytype] TEXT,
                 [rating] TEXT
                 )''')
-
-    cursor.execute('''
-                CREATE TABLE IF NOT EXISTS message(
-                [id] INTEGER PRIMARY KEY AUTOINCREMENT,
-                [fromid] INTEGER,
-                [toid] INTEGER,
-                [content] TEXT,
-                [time] DATE,
-                FOREIGN KEY (fromid) REFERENCES user (id),
-                FOREIGN KEY (toid) REFERENCES user (id)
-                )''')
+    
 
     cursor.execute('''
                 CREATE TABLE IF NOT EXISTS preferences(

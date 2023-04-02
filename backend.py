@@ -109,6 +109,32 @@ class backend:
         result = cursor.fetchone()[0]
         return result
     
+    def getInterestsByUserId(self, userid):
+        query = f"SELECT * FROM interests where id = '{userid}'"
+        cursor = self.connection.cursor()
+        cursor.execute(query)
+        result = cursor.fetchall()
+        interests = self.getInterestsColumns()[1:]
+        userInterests = []
+        for i in range(len(result)):
+            if result[i]==1:
+                userInterests.append(interests[i])
+        return userInterests
+    
+
+    def getSugestions(self):
+        json = {}
+        json["users"] = []
+        for i in self.checkSimilarPreferencesInterests():
+            dic = {}
+            dic["userId"] = i[0]
+            dic["name"] = i[1] 
+            dic["pfp"] = i[2]
+            dic["interests"] = self.getInterestsByUserId(i[0])
+            json["users"].append(dic)
+
+        return json
+    
     def getUserInterests(self, token):
         valid = self.verifyExp(token)
         if valid:
@@ -246,6 +272,43 @@ class backend:
 
             return 200
         return 420
+    
+
+    def newMatch(self, fromid, toid):
+        cursor = self.connection.cursor()
+        cursor.execute(f'INSERT INTO match (fromid, toid) VALUES ("{fromid}", "{toid}")')
+        return 200
+    
+
+    def updateSwipe(self, token, payload):
+        valid = self.verifyExp(token)
+        if valid:
+            userid = self.decodeJWT(token)["userId"]
+            cursor = self.connection.cursor()
+            cursor.execute(f'''INSERT INTO swipe
+                            (userid, targetid, right, left) VALUES 
+                            ("{payload["userId"]}", "{payload["targetId"]}", "{payload["right"]}", "{payload["left"]}")''')
+
+            cursor.execute(f'SELECT right FROM swipe WHERE userid = "{payload["targetId"]}"')
+            result = cursor.fetchone()[0]
+            if result == 1:
+                self.newMatch(userid, payload["targetId"])
+            return 200
+        
+        return 420
+    
+
+    def addPlace(self, token, payload):
+        valid = self.verifyExp(token)
+        if valid:
+            userid = self.decodeJWT(token)["userId"]
+            cursor = self.connection.cursor()
+            cursor.execute(f'''INSERT INTO place (street, city, country, studytype, rating) 
+                            VALUES ("{payload["street"]}", "{payload["city"]}", "{payload["country"]}", "{payload["studytype"]}", "{payload["rating"]}")''')
+            
+            return 200
+
+        return 420
 
 
     def createNewUser(self, payload):
@@ -300,8 +363,9 @@ class backend:
             contact = payload["contact"]
             academicDegree = payload["academicDegree"]
             academicArea = payload["academicArea"]
+            bio = payload["bio"]
 
-            query = f"""UPDATE user SET name = '{name}', dob = '{dob}', contact = '{contact}' , academicDegree =' {academicDegree}', academicArea = '{academicArea}'
+            query = f"""UPDATE user SET name = '{name}', dob = '{dob}', contact = '{contact}' , academicDegree =' {academicDegree}', academicArea = '{academicArea}', bio = '{bio}'
                     WHERE id = '{userId}';
             """
 
@@ -342,20 +406,35 @@ class backend:
         if valid:
             userid = self.decodeJWT(token)["userId"]
             cursor = self.connection.cursor()
-            cursor.execute(f'''SELECT u.id, COUNT(p.id) AS common_preferences
-                            FROM user AS u
-                            INNER JOIN preferences AS p
-                            ON u.user_preferences = p.id
-                            INNER JOIN preferences AS p2 ON p2.id = (SELECT user_preferences FROM user WHERE id = "{userid}")
-                            WHERE u.id <> "{userid}" AND (
-                                p.bph = p2.bph OR
-                                p.studylocal = p2.studylocal OR 
-                                p.music = p2.music OR 
-                                p.schedule = p2.schedule OR 
-                                p.talkative = p2.talkative
-                            ) GROUP BY u.id, u.name ORDER BY common_preferences DESC;''')
-            print(cursor.fetchall())
-            return 200
+            cursor.execute(f'''SELECT u.id, u.name, u.email, u.location,
+                            COUNT(*) AS num_common_interests,
+                            SUM(CASE WHEN p.bph = my_pref.bph THEN 1 ELSE 0 END) AS bph_match,
+                            SUM(CASE WHEN p.studylocal = my_pref.studylocal THEN 1 ELSE 0 END) AS studylocal_match,
+                            SUM(CASE WHEN p.music = my_pref.music THEN 1 ELSE 0 END) AS music_match,
+                            SUM(CASE WHEN p.schedule = my_pref.schedule THEN 1 ELSE 0 END) AS schedule_match,
+                            SUM(CASE WHEN p.talkative = my_pref.talkative THEN 1 ELSE 0 END) AS talkative_match
+                            FROM user u
+                            JOIN interests i ON u.user_interests = i.id
+                            JOIN preferences p ON u.user_preferences = p.id
+                            JOIN user my_user ON my_user.id = "{userid}"
+                            JOIN interests my_int ON my_user.user_interests = my_int.id
+                            JOIN preferences my_pref ON my_user.user_preferences = my_pref.id
+                            LEFT JOIN swipe s ON u.id = s.targetid AND s.userid = my_user.id
+                            WHERE u.id <> my_user.id AND s.right IS NULL AND s.left IS NULL
+                            AND (i.Mathematics = my_int.Mathematics OR i.Portuguese = my_int.Portuguese OR i.English = my_int.English
+                            OR i.German = my_int.German OR i.Physics = my_int.Physics OR i.Chemistry = my_int.Chemistry
+                            OR i.Economics = my_int.Economics OR i.Biology = my_int.Biology OR i.Geology = my_int.Geology
+                            OR i.History = my_int.History OR i.Computing = my_int.Computing OR i.Engineering = my_int.Engineering
+                            OR i.Medicine = my_int.Medicine OR i.Nursing = my_int.Nursing OR i.Pharmacy = my_int.Pharmacy
+                            OR i.Education = my_int.Education OR i.Law = my_int.Law OR i.Psychology = my_int.Psychology
+                            OR i.Politics = my_int.Politics OR i.Sports = my_int.Sports
+                            OR p.bph = my_pref.bph OR p.studylocal = my_pref.studylocal OR p.music = my_pref.music
+                            OR p.schedule = my_pref.schedule OR p.talkative = my_pref.talkative)
+                            GROUP BY u.id
+                            ORDER BY num_common_interests DESC;''')
+
+            result = cursor.fetchall()
+            return result
         return 420
 
     def getUsers(self, token, preferences):
