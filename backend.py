@@ -401,7 +401,7 @@ class backend:
         sqlite_getUsers_query = """SELECT * FROM user"""        
         cursor = self.connection.cursor()
         cursor.execute(sqlite_getUsers_query)
-        return cursor.fetchall()
+        return {"users":cursor.fetchall()[0]}
     
     def checkSimilarPreferences(self, token):
         valid = self.verifyExp(token)
