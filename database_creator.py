@@ -13,6 +13,7 @@ def create_db():
                 [name] TEXT, 
                 [email] TEXT,
                 [contact] TEXT,
+                [bio] TEXT,
                 [pwd] TEXT,
                 [dob] DATE,
                 [academicArea] TEXT,

@@ -253,6 +253,7 @@ class backend:
         email = payload["email"]
         username = ""
         dob = ""
+        bio = ""
         academicArea = ""
         academicDegree = ""
         picture = ""
