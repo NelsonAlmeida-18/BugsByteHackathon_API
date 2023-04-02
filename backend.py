@@ -128,11 +128,9 @@ class backend:
     def getName(self, token):
         valid = self.verifyExp(token)
         if valid:
-            userId = self.decodeJWT(token)
-            print(userId)
+            userId = self.decodeJWT(token)["userId"]
             query = f"""SELECT name FROM user where id = '{userId}' """
             cursor = self.connection.cursor()
-            print(query)
             cursor.execute(query)
             result = cursor.fetchone()[0]
             return result
@@ -142,7 +140,7 @@ class backend:
     def getEmail(self, token):
         valid = self.verifyExp(token)
         if valid:
-            userId = self.decodeJWT(token)
+            userId = self.decodeJWT(token)["userId"]
             query = f"""SELECT email FROM user where id = '{userId}' """
             cursor = self.connection.cursor()
             cursor.execute(query)
@@ -154,7 +152,7 @@ class backend:
     def getContact(self, token):
         valid = self.verifyExp(token)
         if valid:
-            userId = self.decodeJWT(token)
+            userId = self.decodeJWT(token)["userId"]
             query = f"""SELECT contact FROM user where id = '{userId}' """
             cursor = self.connection.cursor()
             cursor.execute(query)
@@ -166,7 +164,7 @@ class backend:
     def getAcademicDegree(self, token):
         valid = self.verifyExp(token)
         if valid:
-            userId = self.decodeJWT(token)
+            userId = self.decodeJWT(token)["userId"]
             query = f"""SELECT academicDegree FROM user where id = '{userId}' """
             cursor = self.connection.cursor()
             cursor.execute(query)
