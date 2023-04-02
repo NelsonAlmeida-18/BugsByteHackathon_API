@@ -117,16 +117,61 @@ class backend:
             cursor = self.connection.cursor()
             cursor.execute(query)
             result = cursor.fetchall()
-            print(result)
             interests = self.getInterestsColumns()[1:]
             userInterests = []
             for i in range(len(result)):
                 if result[i]==1:
                     userInterests.append(interests[i])
             return userInterests
-
-
         return []
+    
+    def getName(self, token):
+        valid = self.verifyExp(token)
+        if valid:
+            userId = self.decodeJWT(token)
+            query = f"""SELECT name FROM user where id = '{userId}' """
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            result = cursor.fetchone()[0]
+            return result
+
+        return ""
+    
+    def getEmail(self, token):
+        valid = self.verifyExp(token)
+        if valid:
+            userId = self.decodeJWT(token)
+            query = f"""SELECT email FROM user where id = '{userId}' """
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            result = cursor.fetchone()[0]
+            return result
+
+        return ""
+    
+    def getContact(self, token):
+        valid = self.verifyExp(token)
+        if valid:
+            userId = self.decodeJWT(token)
+            query = f"""SELECT contact FROM user where id = '{userId}' """
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            result = cursor.fetchone()[0]
+            return result
+
+        return ""
+    
+    def getAcademicDegree(self, token):
+        valid = self.verifyExp(token)
+        if valid:
+            userId = self.decodeJWT(token)
+            query = f"""SELECT academicDegree FROM user where id = '{userId}' """
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            result = cursor.fetchone()[0]
+            return result
+
+        return ""
 
     def getInterestsColumns(self):
         cursor = self.connection.cursor()
