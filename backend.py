@@ -125,7 +125,9 @@ class backend:
     def getSugestions(self):
         json = {}
         json["users"] = []
-        for i in self.checkSimilarPreferencesInterests():
+        suges = self.checkSimilarPreferencesInterests()
+        print(suges)
+        for i in suges:
             dic = {}
             dic["userId"] = i[0]
             dic["name"] = i[1] 
@@ -435,7 +437,7 @@ class backend:
 
             result = cursor.fetchall()
             return result
-        return 420
+        return []
 
     def getUsers(self, token, preferences):
         #decrypt token
