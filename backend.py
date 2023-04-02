@@ -116,7 +116,7 @@ class backend:
             query = f"SELECT * FROM interests where id = '{userId}'"
             cursor = self.connection.cursor()
             cursor.execute(query)
-            result = cursor.fetchall()[0]
+            result = cursor.fetchall()
             print(result)
             interests = self.getInterestsColumns()[1:]
             userInterests = []
