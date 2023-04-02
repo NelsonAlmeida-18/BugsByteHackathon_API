@@ -29,9 +29,16 @@ def login():
         return ""    
     return result
 
+@app.route("/updateAccount", methods=["PUT"])
+def updateAccount():
+    conta = request.json
+    statusCode = my_backend.updateAccount(conta["token"],{"name":conta["name"], "dob":conta["dob"], "contact":conta["contact"], "academicDegree":conta["academicDegree"], "academicArea":conta["academicArea"]})
+    return statusCode
+
 @app.route("/getAllUsers", methods=["GET"])
 def getAllUsers():
     return my_backend.getAllUsers()
+
 
 
 if __name__ == '__main__':
