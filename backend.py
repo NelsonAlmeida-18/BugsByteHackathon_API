@@ -115,9 +115,10 @@ class backend:
             userId = self.decodeJWT(token)["userId"]
             query = f"SELECT * FROM interests where id = '{userId}'"
             cursor = self.connection.cursor()
-            result = cursor.execute(query)
+            cursor.execute(query)
+            result = cursor.fetchall()
             print(result)
-            
+
         return ""
 
     def getInterestsColumns(self):
