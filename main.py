@@ -17,16 +17,13 @@ def createAccount():
     if request!=None:
         conta = request.json
         statusCode, token = my_backend.createNewUser({"email":conta["email"], "pwd":conta["pwd"]})
-    
     return {"token":token}
 
 @app.route("/login", methods=["POST"])
 def login():
     conta = request.json
-    statusCode, result = my_backend.login({"id":conta["id"], "pwd": conta["pwd"]})
-    if statusCode!=200:
-        return ""    
-    return result
+    statusCode, result = my_backend.login({"id":conta["id"], "pwd": conta["pwd"]})    
+    return {"token":result}
 
 @app.route("/updateAccount", methods=["PUT"])
 def updateAccount():
@@ -62,6 +59,10 @@ def getSuggestions():
     conta = request.json
     print(my_backend.checkSimilarPreferences(conta["token"]))
     return ""
+
+@app.route("/getAllUsers", methods=["GET"])
+def getAllUsers():
+    return my_backend.getAllUsers()
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
