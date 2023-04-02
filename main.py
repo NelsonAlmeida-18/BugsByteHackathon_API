@@ -33,12 +33,13 @@ def login():
 def updateAccount():
     conta = request.json
     statusCode = my_backend.updateAccount(conta["token"],{"name":conta["name"], "dob":conta["dob"], "contact":conta["contact"], "academicDegree":conta["academicDegree"], "academicArea":conta["academicArea"]})
-    return statusCode
+    return f"{statusCode}"
 
-@app.route("/getAllUsers", methods=["GET"])
-def getAllUsers():
-    return my_backend.getAllUsers()
-
+@app.route("/updatePreferences", methods=["PUT"])
+def updatePreferences():
+    conta = request.json
+    result = my_backend.updatePreferences(conta["token"], {"bph":conta["bph"], "studylocal":conta["studyLocal"], "music":conta["music"], "schedule":conta["schedule"], "talkative":conta["talkative"]})
+    return f"{result}"
 
 
 if __name__ == '__main__':
