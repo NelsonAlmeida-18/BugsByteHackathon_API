@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 import os
 import sys
 import subprocess
@@ -16,9 +16,9 @@ def createAccount():
     if request!=None:
         conta = request.json
         statusCode, payload = my_backend.createNewUser({"email":conta["email"], "pwd":conta["pwd"]})
-        if statusCode!=200:
-            return ""
-        return payload
+        headers = {"Content-Type":"application/json", "Bearer":payload}
+        response = make_response(statusCode, headers)
+        return response
     return ""
 
 @app.route("/login", methods=["POST"])
