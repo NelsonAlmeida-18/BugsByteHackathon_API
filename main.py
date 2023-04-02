@@ -17,7 +17,7 @@ def index():
 
 @app.route("/signup", methods=["POST"])
 def createAccount(conta):
-
+    print(conta)
     if conta!=None:
         statusCode, payload = my_backend.createNewUser({"email":conta["email"], "pwd":conta["pwd"]})
         if statusCode!=200:
