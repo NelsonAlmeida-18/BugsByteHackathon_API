@@ -288,12 +288,13 @@ class backend:
             cursor = self.connection.cursor()
             cursor.execute(f'''INSERT INTO swipe
                             (userid, targetid, right, left) VALUES 
-                            ("{payload["userId"]}", "{payload["targetId"]}", "{payload["right"]}", "{payload["left"]}")''')
+                            ("{userid}", "{payload["targetId"]}", "{payload["right"]}", "{payload["left"]}")''')
 
-            cursor.execute(f'SELECT right FROM swipe WHERE userid = "{payload["targetId"]}"')
+            cursor.execute(f'SELECT right FROM swipe WHERE userid = "{payload["targetid"]}" AND targetid = "{userid}"')
             result = cursor.fetchone()[0]
             if result == 1:
                 self.newMatch(userid, payload["targetId"])
+                self.newMatch(payload["targetId"], userid)
             return 200
         
         return 420
@@ -437,6 +438,18 @@ class backend:
             result = cursor.fetchall()
             return result
         return []
+    
+    def getUserMatches(self, token):
+        valid = self.verifyExp(token)
+        if valid:
+            cursor = self.connection.cursor()
+            userid = self.decodeJWT(token)
+            cursor.execute("SELECT toid FROM match WHERE fromid = '{userid}'")
+            
+            result = cursor.fetchall()
+            return result
+        
+        return 420
 
     def getUsers(self, token, preferences):
         #decrypt token
