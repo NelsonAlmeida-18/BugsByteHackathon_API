@@ -54,9 +54,9 @@ def getProfileInfo():
     conta = request.json
     return {"pfp": "", "name": my_backend.getName(conta["token"]), "email":my_backend.getEmail(conta["token"]), "contact":my_backend.getContact(conta["token"]), "academicDegree": my_backend.getAcademicDegree(conta["token"]), "interests":my_backend.getUserInterests(conta["token"])}
 
-@app.route("/getSuggestions", methods=["GET"])
-def getSuggestions():
-    print(request.json)
+@app.route("/getSugestion", methods=["GET"])
+def getSugestion():
+    print(request, request.json, "here")
     conta = request.json
     result = my_backend.getSugestions(conta["token"])
     if result != []:
