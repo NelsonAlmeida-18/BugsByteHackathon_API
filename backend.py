@@ -180,12 +180,13 @@ class backend:
             allInterests = self.getInterestsColumns()
             cursor = self.connection.cursor()
 
-            cursor.execute(f"SELECT user_interests FROM user WHERE id = '{id}';")
-            user_interests = cursor.fetchone()[0]
+            #é o mesmo id do que o userId
+            #cursor.execute(f"SELECT user_interests FROM user WHERE id = '{id}';")
+            #user_interests = cursor.fetchone()[0]
 
             sqlite3_update = "UPDATE interests SET "
 
-            for i in range(1, len(allInterests)):
+            for i in range(0, len(allInterests)):
                 if allInterests[i] in payload:
                     sqlite3_update += allInterests[i] + " = 1"
                 else:
@@ -193,8 +194,8 @@ class backend:
                 
                 if i < len(allInterests)-1:
                     sqlite3_update += ", "
-
-            sqlite3_update += " WHERE id = " + str(user_interests) + ";"
+            userId = self.decodeJWT(token)["userId"]
+            sqlite3_update += f" WHERE id = '{userId}';"
 
             cursor.execute(sqlite3_update)
 
