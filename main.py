@@ -1,6 +1,12 @@
 from flask import Flask, jsonify
 import os
+import sys
+import subprocess
 from backend import *
+
+subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
+'pyjwt'])
+
 
 app = Flask(__name__)
 my_backend = backend()
