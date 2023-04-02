@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request
 import os
 import sys
 import subprocess
@@ -13,13 +13,12 @@ def index():
 
 @app.route("/signup", methods=["POST"])
 def createAccount():
+    token = ""
     if request!=None:
         conta = request.json
-        statusCode, payload = my_backend.createNewUser({"email":conta["email"], "pwd":conta["pwd"]})
-        headers = {"Content-Type":"application/json", "Bearer":payload}
-        response = make_response(statusCode, headers)
-        return response
-    return ""
+        statusCode, token = my_backend.createNewUser({"email":conta["email"], "pwd":conta["pwd"]})
+    
+    return {"token":token}
 
 @app.route("/login", methods=["POST"])
 def login():
