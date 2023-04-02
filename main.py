@@ -64,5 +64,15 @@ def getSuggestions():
 def getAllUsers():
     return my_backend.getAllUsers()
 
+@app.route("/swipe", methods=["POST"])
+def swipe():
+    conta = request.json
+    token = conta["token"]
+    targetid = conta["targetid"]
+    swipeLeft = conta["left"]
+    swipeRight = conta["right"]
+    return my_backend.updateSwipe(token, {"userId":targetid, "left":swipeLeft, "right":swipeRight})
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
