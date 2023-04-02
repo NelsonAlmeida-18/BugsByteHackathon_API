@@ -129,8 +129,10 @@ class backend:
         valid = self.verifyExp(token)
         if valid:
             userId = self.decodeJWT(token)
+            print(userId)
             query = f"""SELECT name FROM user where id = '{userId}' """
             cursor = self.connection.cursor()
+            print(query)
             cursor.execute(query)
             result = cursor.fetchone()[0]
             return result
