@@ -13,19 +13,13 @@ def index():
 
 @app.route("/signup", methods=["POST"])
 def createAccount():
-    """
-    print(conta)
-    if conta!=None:
+    if request!=None:
+        conta = request.json
         statusCode, payload = my_backend.createNewUser({"email":conta["email"], "pwd":conta["pwd"]})
         if statusCode!=200:
             return ""
         return payload
-    """
-    data = request.data
-    json = request.json
-    print(json)
-    print(data)
-    return "heu"
+    return ""
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
