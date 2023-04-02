@@ -9,7 +9,7 @@ my_backend = backend()
 def index():
     return jsonify({"Choo Choo": "Welcome to your Flask app 🚅"})
 
-@app.route("/signup", methods=["POST"])
+@app.route("/signup")
 def createAccount(conta):
     if conta!=None:
         statusCode, payload = my_backend.createNewUser({"email":conta["email"], "pwd":conta["pwd"]})
@@ -17,7 +17,7 @@ def createAccount(conta):
             return ""
         return payload
     
-    
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
