@@ -144,7 +144,7 @@ class backend:
             cursor = self.connection.cursor()
             cursor.execute(query)
             result = cursor.fetchone()
-            interests = self.getInterestsColumns()[1:]
+            interests = self.getInterestsColumns()
             userInterests = []
             
             for i in range(1, len(result)):
