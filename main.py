@@ -56,6 +56,7 @@ def getProfileInfo():
 
 @app.route("/getSuggestions", methods=["GET"])
 def getSuggestions():
+    print(request.json)
     conta = request.json
     result = my_backend.getSugestions(conta["token"])
     if result != []:
