@@ -108,7 +108,18 @@ class backend:
         cursor.execute("SELECT id FROM interests")
         result = cursor.fetchone()[0]
         return result
-        
+    
+    def getUserInterests(self, token):
+        valid = self.verifyExp(token)
+        if valid:
+            userId = self.decodeJWT(token)["userId"]
+            query = f"SELECT * FROM interests where id = '{userId}'"
+            cursor = self.connection.cursor()
+            result = cursor.execute(query)
+            print(result)
+            
+        return ""
+
     def getInterestsColumns(self):
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM interests")

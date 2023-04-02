@@ -41,16 +41,17 @@ def updatePreferences():
     result = my_backend.updatePreferences(conta["token"], {"bph":conta["bph"], "studylocal":conta["studyLocal"], "music":conta["music"], "schedule":conta["schedule"], "talkative":conta["talkative"]})
     return f"{result}"
 
-
 @app.route("/updateInterest", methods=["PUT"])
 def updateInterests():
     conta = request.json
     result = my_backend.updateInterests(conta["token"], conta["interests"])
     return f"{result}"
 
-@app.route("/getInterests", methods=["GET"])
-def getInterests():
-    return {"interests" : my_backend.getInterests()}
+@app.route("/getUserInterests", methods=["GET"])
+def getUserInterests():
+    conta = request.json
+    result = my_backend.getUserInterests(conta["token"])
+    return {result}
 
 
 if __name__ == '__main__':
