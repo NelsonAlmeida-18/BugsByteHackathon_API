@@ -439,17 +439,28 @@ class backend:
             return result
         return []
     
-    def getUserMatches(self, token):
+    def getUserMatches(self, userid):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT toid FROM match WHERE fromid = '{userid}'")
+        result = cursor.fetchall()
+        return result
+    
+    def getChats(self, token):
         valid = self.verifyExp(token)
+        result = {}
+        result["Messages"] = []
         if valid:
-            cursor = self.connection.cursor()
             userid = self.decodeJWT(token)
-            cursor.execute("SELECT toid FROM match WHERE fromid = '{userid}'")
-            
-            result = cursor.fetchall()
-            return result
-        
-        return 420
+            matches = self.getUserMatches()
+            cursor = self.connection.cursor()
+
+            for target in matches:
+                cursor.execute("SELECT contact, name FROM user WHERE id = '{target[0]}'")
+                info = cursor.fetchone()
+                result["Messages"].append({"Contact":info[0], "name":info[1]})
+
+        return result
+                
 
     def getUsers(self, token, preferences):
         #decrypt token
