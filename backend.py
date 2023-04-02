@@ -143,10 +143,11 @@ class backend:
             query = f"SELECT * FROM interests where id = '{userId}'"
             cursor = self.connection.cursor()
             cursor.execute(query)
-            result = cursor.fetchall()
+            result = cursor.fetchone()
             interests = self.getInterestsColumns()[1:]
             userInterests = []
-            for i in range(len(result)):
+            
+            for i in range(1, len(result)):
                 if result[i]==1:
                     userInterests.append(interests[i])
             return userInterests
