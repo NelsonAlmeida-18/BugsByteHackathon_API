@@ -354,6 +354,7 @@ class backend:
                                 p.schedule = p2.schedule OR 
                                 p.talkative = p2.talkative
                             ) GROUP BY u.id, u.name ORDER BY common_preferences DESC;''')
+            print(cursor.fetchall())
             return 200
         return 420
 
